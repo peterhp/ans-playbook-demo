@@ -1,0 +1,22 @@
+#!/bin/bash
+
+RETRY_COUNT=60
+RETRY_INTERVAL=5s
+
+HEALTH_URL={{ app_base_url }}/health
+
+for ((count=1; count<=$RETRY_COUNT; count++))
+do
+    echo "Try to access web server... (Times: $count)"
+    ret=`curl --silent $HEALTH_URL | grep "UP"`
+
+    if [ "$ret" != "" ]; then
+        echo "Web server is running now..."
+        exit 0
+    fi
+
+    sleep $RETRY_INTERVAL
+done
+
+echo "Web server failed to start up..."
+exit -1

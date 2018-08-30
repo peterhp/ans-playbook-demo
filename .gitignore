@@ -1,0 +1,7 @@
+
+secrets/
+practices/
+
+*.retry
+
+.DS_Store

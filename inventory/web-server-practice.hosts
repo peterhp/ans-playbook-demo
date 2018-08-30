@@ -1,0 +1,16 @@
+######################### Variables #########################
+
+[all:vars]
+ansible_ssh_common_args = '-o StrictHostKeyChecking=no'
+
+[web-server:vars]
+
+inst_region = ap-southeast-1
+inst_key_name = xiaoyao-chengdu
+
+ansible_user = ec2-user
+
+#########################   Hosts   #########################
+
+[web-server]
+web-server-practice ansible_host=54.255.194.243

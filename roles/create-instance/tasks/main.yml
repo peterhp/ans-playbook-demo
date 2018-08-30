@@ -1,0 +1,31 @@
+---
+
+- name: Create AWS EC2 instance
+  ec2:
+    region: "{{ inst_region }}"
+    image: "{{ inst_image }}"
+    instance_type: "{{ inst_type }}"
+    group_id: "{{ inst_group }}"
+    vpc_subnet_id: "{{ inst_subnet }}"
+    key_name: "{{ inst_key_name }}"
+    volumes:
+      - Name: "{{ inst_name }}"
+        device_name: /dev/xvda
+        volume_type: gp2
+        volume_size: 8
+        delete_on_termination: true
+    instance_tags:
+      Name: "{{ inst_name }}"
+    assign_public_ip: yes
+    wait: yes
+  register: aws_insts
+
+- name: Log instance name & IP
+  block:
+    - set_fact:
+        aws_inst: "{{ aws_insts.instances[0] }}"
+    - set_fact:
+        aws_inst_summary:
+          name: "{{ aws_inst.tags.Name }}"
+          ipaddr: "{{ aws_inst.public_ip }}"
+    - debug: var=aws_inst_summary

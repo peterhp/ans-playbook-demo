@@ -1,0 +1,24 @@
+---
+
+- block:
+    - set_fact: build_path="/apps/tmp/{{ app_name }}"
+    - set_fact: app_jar_path="{{ build_path }}/{{ app_name }}.jar"
+
+- block:
+    - name: Create app build directory
+      file: state=directory path="{{ build_path }}"
+    - name: Fetch app project
+      git:
+        repo: "{{ app_repo }}"
+        dest: "{{ build_path }}"
+        version: "{{ app_branch }}"
+
+- block:
+    - name: Build app
+      command: ./gradlew clean build
+      args: 
+        chdir: "{{ build_path }}"
+    - copy:
+        src: "{{ build_path }}/build/libs/{{ app_name }}.jar"
+        dest: "{{ app_jar_path }}"
+        remote_src: yes

@@ -1,0 +1,31 @@
+---
+
+- hosts: web-server
+  gather_facts: no
+
+  vars:
+    app_name: ans-web-demo
+    app_version: "{{ app_version }}"
+    app_jar_path: "{{ app_jar_path }}"
+    app_base_url: http://localhost:8080
+
+  tasks:
+  - name: Create /apps directory
+    file: 
+      state: directory
+      path: /apps
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+    become: yes
+
+  - import_role: name=roles/deploy-spring-boot
+    vars:
+      app_file: "{{ app_jar_path }}"
+
+  - name: Check app health
+    uri:
+      method: GET
+      url: "http://{{ ansible_host }}:8080/health"
+      return_content: yes
+    register: ah_response
+    failed_when: ah_response.json['status'] != 'UP'

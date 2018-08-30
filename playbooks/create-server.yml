@@ -1,0 +1,11 @@
+---
+
+- hosts: web-server
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - include_role: name=roles/create-instance
+    vars: 
+      inst_name: "{{ inventory_hostname }}"
+    when: hostvars[inventory_hostname]['ansible_host'] == ''

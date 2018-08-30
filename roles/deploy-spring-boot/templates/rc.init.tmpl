@@ -1,0 +1,63 @@
+#!/bin/bash
+
+APP_NAME={{ app_name }}
+APP_PATH={{ app_path }}/{{ app_name }}-{{ app_version }}.jar
+LOG_PATH={{ app_log_path }}/application.log
+
+if [ "$1" = "" ];
+then
+    echo "Usage: sh $0 {start|stop|restart|status}"
+    exit 1
+fi
+
+function check_pid() {
+	APP_PID=`ps -ef | grep java | grep $APP_NAME | grep -v grep | awk '{print $2}'`
+}
+
+function status() {
+	check_pid
+
+	if [ ! -n "$APP_PID" ]; then
+		echo "$APP_NAME is NOT running..."
+    else
+		echo "$APP_NAME (PID: $APP_PID) is running..."
+	fi
+}
+
+function start() {
+	check_pid
+
+	if [ ! -n "$APP_PID" ]; then
+		echo "Start $APP_NAME..."
+		nohup java -jar $APP_PATH > $LOG_PATH 2>&1 &
+		sleep 5s
+	else
+		echo "$APP_NAME (PID: $APP_PID) is running..."
+	fi
+}
+
+function stop() {
+	check_pid
+
+	if [ ! -n "$APP_PID" ]; then
+		echo "$APP_NAME is NOT running..."
+	else
+		echo "Stop $APP_NAME..."
+		kill -9 $APP_PID
+		sleep 5s
+	fi
+}
+
+function restart() {
+	stop
+	sleep 5s
+	start
+}
+
+case $1 in
+	start)		start;;
+	stop)		stop;;
+	restart)	restart;;
+	status)		status;;
+		*)		echo "Usage: sh $0 {start|stop|restart|status}";;
+esac

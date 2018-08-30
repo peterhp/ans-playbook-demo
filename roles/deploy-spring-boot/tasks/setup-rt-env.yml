@@ -1,0 +1,6 @@
+---
+
+- name: Install OpenJDK 8
+  import_role: name=roles/install-toolkit
+  vars: 
+    toolkit: java-1.8.0-openjdk-devel

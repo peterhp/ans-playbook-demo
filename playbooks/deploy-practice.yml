@@ -1,0 +1,56 @@
+---
+
+- hosts: web-server
+  gather_facts: no
+
+  vars:
+    app_name: ans-web-demo
+    app_repo: https://github.com/peterhp/ans-web-demo.git
+    app_base_url: http://localhost:8080
+
+  tasks:
+  - name: Create web server
+    block:
+      - name: Create instance
+        import_role: name=roles/create-instance
+        vars: 
+          inst_name: "{{ inventory_hostname }}"
+        delegate_to: localhost
+      - set_fact: 
+          ansible_host: "{{ aws_inst.public_ip }}"
+    when: hostvars[inventory_hostname]['ansible_host'] == ''
+
+  - name: Print web server name & host
+    debug:
+      msg: "{{ inventory_hostname }} -- {{ ansible_host }}"
+  
+  - name: Wait for SSH connection
+    wait_for_connection:
+      sleep: 15
+      timeout: 300
+
+  - name: Create /apps directory
+    file: 
+      state: directory
+      path: /apps
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+    become: yes
+
+  - import_role: name=roles/build-spring-boot
+
+  - import_role: name=roles/deploy-spring-boot
+    vars:
+      app_file: "{{ app_jar_path }}"
+      app_local_file: yes
+
+  - name: Print app base url
+    debug: msg="App base url -- http://{{ ansible_host }}:8080"
+
+  - name: Check app health
+    uri:
+      method: GET
+      url: "http://{{ ansible_host }}:8080/health"
+      return_content: yes
+    register: ah_response
+    failed_when: ah_response.json['status'] != 'UP'

@@ -1,0 +1,7 @@
+---
+
+- name: Install toolkit
+  yum:
+    name: "{{ toolkit }}"
+    state: present
+  become: yes

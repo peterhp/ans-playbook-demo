@@ -1,0 +1,10 @@
+---
+
+- block:
+    - name: Create rc.verify script
+      template: 
+        src: ../templates/rc.verify.tmpl
+        dest: /apps/rc.verify
+        mode: 0700
+    - name: Wait and verify app running status
+      command: /apps/rc.verify

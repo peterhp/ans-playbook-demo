@@ -1,0 +1,7 @@
+---
+
+- import_tasks: ./setup-rt-env.yml
+
+- import_tasks: ./start-app.yml
+
+- import_tasks: ./verify-app.yml

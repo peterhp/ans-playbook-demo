@@ -1,0 +1,35 @@
+---
+
+- hosts: jenkins-node
+  gather_facts: no
+  
+  tasks:
+  - name: Remove Java 7 & Install Java 8
+    block:
+      - name: Remove java 7
+        yum: name=java7 state=removed
+      - name: Install java 8
+        yum: name=java-1.8.0-openjdk-devel.x86_64 state=installed
+    become: yes
+    
+  - name: Install git
+    yum: name=git state=installed
+    become: yes
+  
+  - name: Install ansible & boto & boto3
+    command: pip install ansible boto boto3
+    become: yes
+  
+  - name: Create /apps directory
+    file: 
+      state: directory
+      path: /apps
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+    become: yes
+
+  - name: Copy web server ssh key to jenkins node
+    copy:
+      src: "{{ ws_ssh_key }}"
+      dest: ~/.ssh/id_rsa
+      mode: 0400

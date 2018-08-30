@@ -1,0 +1,6 @@
+---
+
+inst_type: t2.micro
+inst_image: ami-01da99628f381e50a
+inst_group: sg-06e96344c81b81790
+inst_subnet: subnet-6831e40d

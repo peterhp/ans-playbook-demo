@@ -1,0 +1,26 @@
+---
+
+- block:
+    - name: Create app path
+      file: state=directory path="{{ app_path }}"
+    - name: Create app log path
+      file: state=directory path="{{ app_log_path }}"
+
+- set_fact:
+    app_file: "{{ app_name }}.jar"
+  when: app_file is undefined
+
+- name: Copy jar to app path
+  copy:
+    src: "{{ app_file }}"
+    dest: "{{ app_path }}/{{ app_name }}-{{ app_version }}.jar"
+    remote_src: "{{ app_local_file | default('no') }}"
+
+- block:
+    - name: Create rc.init script
+      template: 
+        src: ../templates/rc.init.tmpl
+        dest: /apps/rc.init
+        mode: 0700
+    - name: Start app
+      command: /apps/rc.init restart

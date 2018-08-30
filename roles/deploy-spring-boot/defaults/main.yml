@@ -1,0 +1,6 @@
+---
+
+app_version: default
+app_path: /apps/boot
+app_log_path: "{{ app_path }}/logs"
+app_base_url: 'http://localhost:8080'

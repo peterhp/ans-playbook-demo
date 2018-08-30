@@ -1,0 +1,26 @@
+######################### Variables #########################
+
+[all:vars]
+ansible_ssh_common_args = '-o StrictHostKeyChecking=no'
+
+[web-server:vars]
+
+inst_region = ap-southeast-1
+inst_key_name = xiaoyao-chengdu
+
+ansible_user = ec2-user
+
+#########################  Groups   #########################
+
+[web-server:children]
+web-server-stage
+web-server-prod
+
+#########################   Hosts   #########################
+
+[web-server-stage]
+ans-web-stage-1 config_env=stage    ansible_host=
+
+[web-server-prod]
+ans-web-prod-1  config_env=prod     ansible_host=
+ans-web-prod-2  config_env=prod     ansible_host=

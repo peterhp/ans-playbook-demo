@@ -52,6 +52,7 @@
 
 ## Web Server Structure
 
+```
 apps/
   |-- boot/
   |    |-- ans-web-demo.jar
@@ -59,3 +60,4 @@ apps/
   |         |-- application.log
   |-- rc.init
   |-- rc.verify
+```

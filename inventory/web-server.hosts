@@ -19,8 +19,8 @@ web-server-prod
 #########################   Hosts   #########################
 
 [web-server-stage]
-ans-web-stage-1 config_env=stage    ansible_host=13.229.247.68
+ans-web-stage-1 config_env=stage    ansible_host=18.136.212.249
 
 [web-server-prod]
-ans-web-prod-1  config_env=prod     ansible_host=18.136.194.214
-ans-web-prod-2  config_env=prod     ansible_host=52.221.185.71
+ans-web-prod-1  config_env=prod     ansible_host=13.229.224.180
+ans-web-prod-2  config_env=prod     ansible_host=13.251.156.12

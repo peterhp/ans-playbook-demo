@@ -9,4 +9,4 @@ ansible_user = ec2-user
 #########################   Hosts   #########################
 
 [jenkins-node]
-xiaoyao-jenkins-node-1  ansible_host=54.255.146.166
+xiaoyao-jenkins-node-4  ansible_host=54.169.76.18

@@ -13,4 +13,4 @@ ansible_user = ec2-user
 #########################   Hosts   #########################
 
 [web-server]
-web-server-practice ansible_host=54.255.194.243
+web-server-practice ansible_host=
